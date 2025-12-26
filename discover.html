@@ -90,5 +90,12 @@
     <div id="notification" class="notification"></div>
 
     <script src="script.js"></script>
+    <script>
+        // Initialize QuickBlog and load blogs on discover page
+        document.addEventListener('DOMContentLoaded', function() {
+            window.quickBlog = new QuickBlog();
+            window.quickBlog.loadSampleBlogs(); // Load all published blogs
+        });
+    </script>
 </body>
 </html>

@@ -24,7 +24,13 @@ const client = redis.createClient({
 
 client.on('error', (err) => {
     console.log('Redis Client Error:', err);
-    console.log('Redis URL:', client.options?.url);
+    console.log('Redis URL:', `redis://default:***@redis-14395.c9.us-east-1-4.ec2.cloud.redislabs.com:14395`);
+    console.log('Environment check:', {
+        REDIS_HOST: process.env.REDIS_HOST ? 'SET' : 'NOT SET',
+        REDIS_PORT: process.env.REDIS_PORT ? 'SET' : 'NOT SET', 
+        REDIS_USERNAME: process.env.REDIS_USERNAME ? 'SET' : 'NOT SET',
+        REDIS_PASSWORD: process.env.REDIS_PASSWORD ? 'SET' : 'NOT SET'
+    });
 });
 
 client.on('connect', () => {
@@ -136,7 +142,8 @@ app.get('/api/blogs', async (req, res) => {
         res.json({ success: true, blogs: blogList });
     } catch (error) {
         console.error('Get all blogs error:', error);
-        res.status(500).json({ success: false, error: 'Failed to fetch blogs' });
+        // Return empty array if Redis fails, so site still works
+        res.json({ success: true, blogs: [] });
     }
 });
 
@@ -193,6 +200,9 @@ app.post('/api/blogs', async (req, res) => {
         const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         await client.set(`blog:${username}:${blogId}`, JSON.stringify(blogData));
         await client.set(`blog_slug:${slug}`, JSON.stringify({ username, blogId }));
+        
+        // Add to global blog list (THIS WAS MISSING!)
+        await client.lPush('blogs', JSON.stringify(blogData));
         
         // Update user's blog list
         const userBlogsData = await client.get(`user_blogs:${username}`);
