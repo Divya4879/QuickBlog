@@ -31,32 +31,10 @@ class QuickBlog {
             this.toggleTheme();
         });
 
-        // Navigation
-        // Navigation - remove section-based navigation since we have separate pages
-        document.querySelectorAll('.nav-link').forEach(link => {
-            // Let all navigation links work normally (no preventDefault)
-            // They will navigate to their respective pages
-        });
+        // Navigation - all links work as normal page navigation now
+        // No event listeners needed since they're proper href links
 
-        // Hero CTA - remove this since we changed to <a> tag
-        // document.getElementById('startWriting').addEventListener('click', () => {
-            if (this.currentUser) {
-                this.showSection('create');
-                this.updateActiveNav('create');
-            } else {
-                this.showAuthModal();
-            }
-        });
-
-        // Final CTA
-        document.getElementById('finalCTA').addEventListener('click', () => {
-            if (this.currentUser) {
-                this.showSection('create');
-                this.updateActiveNav('create');
-            } else {
-                this.showAuthModal();
-            }
-        });
+        // CTA buttons are now anchor tags, no event listeners needed
 
         // Auth modal
         document.getElementById('loginBtn').addEventListener('click', () => {
