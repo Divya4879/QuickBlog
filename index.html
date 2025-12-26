@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBlog - Where Ideas Come to Life</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✍️</text></svg>">
+</head>
+<body data-theme="light">
+    <nav class="navbar glass">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">✍️</span>
+                <span class="brand-text">QuickBlog</span>
+            </div>
+            <div class="nav-center">
+                <a href="#home" class="nav-link active" data-section="home">Home</a>
+                <a href="#blogs" class="nav-link" data-section="blogs">Discover</a>
+                <a href="#create" class="nav-link" data-section="create">Create</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button class="btn-primary" id="loginBtn">Sign In</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-bg"></div>
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Blog From Your <span class="gradient-text">Terminal</span> 
+                        Get <span class="gradient-text">Shareable Links</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Write markdown in your favorite editor, publish via CLI, get instant shareable links. 
+                        No web interface needed - pure terminal workflow for developers.
+                    </p>
+                    <div class="hero-cta">
+                        <button class="btn-cta" id="startWriting">
+                            <span>Start Blogging via CLI</span>
+                            <span class="btn-icon">🔗</span>
+                        </button>
+                        <div class="cta-note">
+                            <span>✓ Pure terminal workflow</span>
+                            <span>✓ Instant shareable links</span>
+                            <span>✓ Markdown support</span>
+                        </div>
+                    </div>
+                    <div class="hero-proof">
+                        <div class="proof-item">
+                            <strong>45K+</strong> posts published via CLI
+                        </div>
+                        <div class="proof-item">
+                            <strong>2 seconds</strong> from terminal to live link
+                        </div>
+                        <div class="proof-item">
+                            <strong>Zero</strong> web interface required
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Why developers love terminal-first blogging</h2>
+                    <p>Stay in your workflow, publish instantly, share everywhere</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>CLI-First Workflow</h3>
+                        <p>Write in vim, VS Code, or any editor. Publish with a single command: `quickblog publish post.md`. Get an instant shareable link without leaving your terminal.</p>
+                        <div class="feature-stat">One command to publish</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h3>Instant Shareable Links</h3>
+                        <p>Every post gets a clean, shareable URL immediately. Perfect for sharing on Twitter, Slack, or embedding in documentation. Links work forever.</p>
+                        <div class="feature-stat">quickblog.dev/your-post</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3>Full Markdown Support</h3>
+                        <p>Write in markdown with syntax highlighting, code blocks, tables, and images. Your terminal workflow stays intact - no web editor needed.</p>
+                        <div class="feature-stat">GitHub-flavored markdown</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Everything you need to know</h2>
+                    <p>Get answers to the most common questions about QuickBlog</p>
+                </div>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>How fast can I really publish content?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Our average publish time is 15 seconds from writing to live. Thanks to our Redis Cloud infrastructure, there's no processing delay - your content appears instantly to readers worldwide.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Will my content actually get discovered?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes. Our platform has 2.3M monthly active readers. Every post gets featured in our discovery feed, and our algorithm promotes quality content. Average posts get 500+ views in the first 24 hours.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Can I integrate QuickBlog with my existing tools?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Absolutely. Our REST API works with any platform - WordPress, Notion, Zapier, or custom applications. You can also publish via email, mobile app, or browser extension.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>What happens to my content if I leave?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>You own your content completely. Export everything with one click - posts, comments, analytics, and reader data. No lock-in, no hassle. Your content, your control.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Is there really no setup required?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Zero setup. Create account, start writing, publish instantly. No themes to configure, no plugins to install, no hosting to manage. Just pure content creation.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>How reliable is the platform?</h3>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>We guarantee 99.9% uptime with Redis Cloud enterprise infrastructure. Your content is replicated across multiple data centers. We've never lost a single post in our 3-year history.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-final">
+            <div class="container">
+                <div class="cta-final-content">
+                    <h2>Ready to blog from your terminal?</h2>
+                    <p>Ready to revolutionize your blogging workflow?</p>
+                    <button class="btn-cta" id="finalCTA">
+                        <span>Get CLI Access</span>
+                        <span class="btn-icon">🔗</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="blogs" class="blogs-section" style="display: none;">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Trending Stories</h2>
+                    <p>Discover the most engaging content from our community</p>
+                </div>
+                <div class="blogs-filter">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="tech">Technology</button>
+                    <button class="filter-btn" data-filter="design">Design</button>
+                    <button class="filter-btn" data-filter="business">Business</button>
+                    <button class="filter-btn" data-filter="lifestyle">Lifestyle</button>
+                    <button class="filter-btn" data-filter="progress">Progress</button>
+                    <button class="filter-btn" data-filter="challenge">Challenge</button>
+                    <button class="filter-btn" data-filter="tutorial">Tutorial</button>
+                    <button class="filter-btn" data-filter="tips">Tips</button>
+                    <button class="filter-btn" data-filter="personal">Personal</button>
+                    <button class="filter-btn" data-filter="career">Career</button>
+                    <button class="filter-btn" data-filter="productivity">Productivity</button>
+                    <button class="filter-btn" data-filter="health">Health</button>
+                    <button class="filter-btn" data-filter="travel">Travel</button>
+                    <button class="filter-btn" data-filter="food">Food</button>
+                    <button class="filter-btn" data-filter="gaming">Gaming</button>
+                    <button class="filter-btn" data-filter="music">Music</button>
+                    <button class="filter-btn" data-filter="art">Art</button>
+                    <button class="filter-btn" data-filter="science">Science</button>
+                    <button class="filter-btn" data-filter="education">Education</button>
+                </div>
+                <div class="blogs-grid" id="blogsGrid">
+                    <div class="blog-skeleton"></div>
+                    <div class="blog-skeleton"></div>
+                    <div class="blog-skeleton"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="create" class="create-section" style="display: none;">
+            <div class="container">
+                <div class="create-content">
+                    <h2>Share Your Story</h2>
+                    <div class="editor-container">
+                        <form id="blogForm" class="blog-form">
+                            <div class="form-group">
+                                <input type="text" id="blogTitle" placeholder="Your story title..." required>
+                            </div>
+                          
+                            <div class="form-group">
+                                <label>Tags (select 1-4):</label>
+                                <div class="tag-selection">
+                                    <input type="hidden" id="blogTags" value="">
+                                    <div class="tag-grid">
+                                        <span class="tag-option" data-tag="tech">tech</span>
+                                        <span class="tag-option" data-tag="design">design</span>
+                                        <span class="tag-option" data-tag="business">business</span>
+                                        <span class="tag-option" data-tag="lifestyle">lifestyle</span>
+                                        <span class="tag-option" data-tag="progress">progress</span>
+                                        <span class="tag-option" data-tag="challenge">challenge</span>
+                                        <span class="tag-option" data-tag="tutorial">tutorial</span>
+                                        <span class="tag-option" data-tag="tips">tips</span>
+                                        <span class="tag-option" data-tag="review">review</span>
+                                        <span class="tag-option" data-tag="personal">personal</span>
+                                        <span class="tag-option" data-tag="career">career</span>
+                                        <span class="tag-option" data-tag="productivity">productivity</span>
+                                        <span class="tag-option" data-tag="health">health</span>
+                                        <span class="tag-option" data-tag="travel">travel</span>
+                                        <span class="tag-option" data-tag="food">food</span>
+                                        <span class="tag-option" data-tag="gaming">gaming</span>
+                                        <span class="tag-option" data-tag="music">music</span>
+                                        <span class="tag-option" data-tag="art">art</span>
+                                        <span class="tag-option" data-tag="science">science</span>
+                                        <span class="tag-option" data-tag="education">education</span>
+                                    </div>
+                                    <small class="tag-counter">0/4 tags selected</small>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <textarea id="blogContent" placeholder="Tell your story... (100-3000 words)" required></textarea>
+                                <div class="word-count">
+                                    <span id="wordCount">0</span> words
+                                    <span class="word-limit">(100-3000 required)</span>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" id="saveDraft">Save Draft</button>
+                                <button type="submit" class="btn-primary">Publish Story</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="authModal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close">&times;</button>
+            <div class="modal-header">
+                <h3 id="modalTitle">Welcome Back</h3>
+                <p id="modalSubtitle">Sign in to continue your journey</p>
+            </div>
+            <form id="authForm" class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
+                </div>
+                <button type="submit" class="btn-primary btn-full">Sign In</button>
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+                <p class="auth-switch">
+                    New to QuickBlog? <span id="switchAuth">Create account</span>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
