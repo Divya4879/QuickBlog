@@ -100,6 +100,34 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Admin endpoints
+app.get('/api/admin/status', async (req, res) => {
+    try {
+        const keys = await client.keys('*');
+        const userKeys = keys.filter(key => key.startsWith('user:'));
+        const blogKeys = keys.filter(key => key.startsWith('blog:'));
+        const blogListLength = await client.lLen('blogs');
+        
+        res.json({
+            success: true,
+            message: `Database contains: ${userKeys.length} users, ${blogKeys.length} individual blogs, ${blogListLength} blogs in list`
+        });
+    } catch (error) {
+        console.error('Admin status error:', error);
+        res.status(500).json({ success: false, error: 'Failed to check database status' });
+    }
+});
+
+app.post('/api/admin/clear', async (req, res) => {
+    try {
+        await client.flushAll();
+        res.json({ success: true, message: 'Database cleared successfully' });
+    } catch (error) {
+        console.error('Admin clear error:', error);
+        res.status(500).json({ success: false, error: 'Failed to clear database' });
+    }
+});
+
 // Get all blogs (public endpoint)
 app.get('/api/blogs', async (req, res) => {
     try {
@@ -576,7 +604,7 @@ app.get('/article/:slug', async (req, res) => {
 
             <article class="article-container">
                 <header class="article-header">
-                    <div class="article-category">${blog.category}</div>
+                    <!-- Category removed -->
                     <h1 class="article-title">${blog.title}</h1>
                     <div class="article-meta">
                         <div class="author-info">
@@ -919,7 +947,7 @@ app.get('/blog/:username/:blogId', async (req, res) => {
             <!-- Article content -->
             <article class="article-container">
                 <header class="article-header">
-                    <div class="article-category">${blog.category}</div>
+                    <!-- Category removed -->
                     <h1 class="article-title">${blog.title}</h1>
                     <div class="article-meta">
                         <div class="author-info">

@@ -372,6 +372,10 @@ class QuickBlog {
 
     loadSampleBlogs() {
         const blogsGrid = document.getElementById('blogsGrid');
+        if (!blogsGrid) {
+            console.log('blogsGrid not found - skipping blog loading');
+            return;
+        }
         
         // Show loading skeletons
         setTimeout(async () => {
