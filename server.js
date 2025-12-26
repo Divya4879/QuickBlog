@@ -272,6 +272,9 @@ app.delete('/api/blogs/:username/:blogId', async (req, res) => {
     try {
         const { username, blogId } = req.params;
         
+        // Get the blog data before deleting (to remove from global list)
+        const blogData = await client.get(`blog:${username}:${blogId}`);
+        
         // Delete the blog
         await client.del(`blog:${username}:${blogId}`);
         
@@ -280,6 +283,21 @@ app.delete('/api/blogs/:username/:blogId', async (req, res) => {
         const userBlogs = userBlogsData ? JSON.parse(userBlogsData) : [];
         const updatedBlogs = userBlogs.filter(id => id !== blogId);
         await client.set(`user_blogs:${username}`, JSON.stringify(updatedBlogs));
+        
+        // IMPORTANT: Remove from global blogs list
+        if (blogData) {
+            const blog = JSON.parse(blogData);
+            const allBlogs = await client.lRange('blogs', 0, -1);
+            const blogIndex = allBlogs.findIndex(blogStr => {
+                const b = JSON.parse(blogStr);
+                return b.id === blogId;
+            });
+            
+            if (blogIndex !== -1) {
+                // Remove the specific blog from the list
+                await client.lRem('blogs', 1, allBlogs[blogIndex]);
+            }
+        }
         
         res.json({ success: true, message: 'Blog deleted successfully' });
     } catch (error) {
