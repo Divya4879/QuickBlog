@@ -36,6 +36,14 @@
       "dest": "/server.js"
     },
     {
+      "src": "/discover",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/create-new",
+      "dest": "/server.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/$1"
     }
