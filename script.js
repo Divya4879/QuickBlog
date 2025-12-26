@@ -22,14 +22,19 @@ class QuickBlog {
     setupTheme() {
         document.body.setAttribute('data-theme', this.currentTheme);
         const themeIcon = document.querySelector('.theme-icon');
-        themeIcon.textContent = this.currentTheme === 'light' ? '🌙' : '☀️';
+        if (themeIcon) {
+            themeIcon.textContent = this.currentTheme === 'light' ? '🌙' : '☀️';
+        }
     }
 
     setupEventListeners() {
-        // Theme toggle
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            this.toggleTheme();
-        });
+        // Theme toggle - check if element exists first
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                this.toggleTheme();
+            });
+        }
 
         // Navigation - all links work as normal page navigation now
         // No event listeners needed since they're proper href links
