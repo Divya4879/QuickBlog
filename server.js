@@ -129,7 +129,7 @@ app.post('/api/blogs', async (req, res) => {
         res.json({ 
             success: true, 
             blogId, 
-            shareableLink: `http://localhost:3001/article/${slug}`,
+            shareableLink: `${req.protocol}://${req.get('host')}/article/${slug}`,
             message: 'Blog published successfully' 
         });
     } catch (error) {

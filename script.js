@@ -396,7 +396,7 @@ class QuickBlog {
                         </div>
                     </div>
                     <div class="blog-stats">
-                        ${showActions ? `
+                        ${showActions && this.currentUser === blog.author ? `
                             <button class="btn-edit" onclick="event.stopPropagation(); window.quickBlog.editBlog('${blog.id}')">Edit</button>
                             <button class="btn-delete" onclick="event.stopPropagation(); window.quickBlog.deleteBlog('${blog.id}')">Delete</button>
                         ` : `<span class="blog-likes">❤️ ${blog.likes || 0}</span>`}
