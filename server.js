@@ -19,12 +19,21 @@ app.use(express.static(__dirname));
 
 // Redis client setup
 const client = redis.createClient({
-    url: process.env.NODE_ENV === 'production' 
-        ? `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
-        : 'redis://default:0lFESlhsABWVJAq1ANCN2nVl9JQ2Se9o@redis-14395.c9.us-east-1-4.ec2.cloud.redislabs.com:14395'
+    url: `redis://${process.env.REDIS_USERNAME || 'default'}:${process.env.REDIS_PASSWORD || '0lFESlhsABWVJAq1ANCN2nVl9JQ2Se9o'}@${process.env.REDIS_HOST || 'redis-14395.c9.us-east-1-4.ec2.cloud.redislabs.com'}:${process.env.REDIS_PORT || '14395'}`
 });
 
-client.on('error', (err) => console.log('Redis Client Error', err));
+client.on('error', (err) => {
+    console.log('Redis Client Error:', err);
+    console.log('Redis URL:', client.options?.url);
+});
+
+client.on('connect', () => {
+    console.log('Redis connected successfully');
+});
+
+client.on('ready', () => {
+    console.log('Redis client ready');
+});
 
 // Connect to Redis
 async function connectRedis() {
