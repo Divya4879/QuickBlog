@@ -93,8 +93,11 @@
     <script>
         // Initialize QuickBlog and load blogs on discover page
         document.addEventListener('DOMContentLoaded', function() {
-            window.quickBlog = new QuickBlog();
-            window.quickBlog.loadSampleBlogs(); // Load all published blogs
+            // Wait a bit more for everything to be ready
+            setTimeout(() => {
+                window.quickBlog = new QuickBlog();
+                window.quickBlog.loadSampleBlogs(); // Load all published blogs
+            }, 100);
         });
     </script>
 </body>
