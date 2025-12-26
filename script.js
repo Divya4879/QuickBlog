@@ -381,12 +381,18 @@ class QuickBlog {
         setTimeout(async () => {
             // Always load all blogs for everyone to see (whether signed in or not)
             const allBlogs = await this.loadAllBlogs();
-            this.renderBlogs(allBlogs, false); // Show all blogs without edit buttons initially
             
-            // If user is logged in, also load their blogs and show edit buttons for their own blogs
-            if (this.currentUser) {
-                // The renderBlogs function will show edit/delete buttons only for blogs authored by currentUser
-                this.renderBlogs(allBlogs, true); // true = check for edit/delete permissions per blog
+            // Check if blogs were loaded successfully
+            if (allBlogs && Array.isArray(allBlogs)) {
+                this.renderBlogs(allBlogs, false); // Show all blogs without edit buttons initially
+                
+                // If user is logged in, re-render with edit permissions
+                if (this.currentUser) {
+                    this.renderBlogs(allBlogs, true); // true = check for edit/delete permissions per blog
+                }
+            } else {
+                // If loading failed, show empty state
+                this.renderBlogs([], false);
             }
         }, 1000);
     }
