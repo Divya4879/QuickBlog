@@ -100,6 +100,18 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Get all blogs (public endpoint)
+app.get('/api/blogs', async (req, res) => {
+    try {
+        const blogs = await client.lRange('blogs', 0, -1);
+        const blogList = blogs.map(blogStr => JSON.parse(blogStr));
+        res.json({ success: true, blogs: blogList });
+    } catch (error) {
+        console.error('Get all blogs error:', error);
+        res.status(500).json({ success: false, error: 'Failed to fetch blogs' });
+    }
+});
+
 // Check title uniqueness
 app.post('/api/blogs/check-title', async (req, res) => {
     try {

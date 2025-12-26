@@ -381,7 +381,8 @@ class QuickBlog {
                 this.renderBlogs(userBlogs, true); // true = show edit/delete buttons
             } else {
                 // Load all blogs for everyone to see
-                this.loadAllBlogs();
+                const allBlogs = await this.loadAllBlogs();
+                this.renderBlogs(allBlogs, false); // false = no edit/delete buttons
             }
         }, 1000);
     }
