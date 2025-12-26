@@ -401,17 +401,22 @@ class QuickBlog {
 
     async loadAllBlogs() {
         try {
+            console.log('Fetching blogs from API...'); // Debug log
             const response = await fetch(`${this.apiEndpoint}/blogs`);
             const data = await response.json();
             
+            console.log('API response:', data); // Debug log
+            
             if (data.success) {
-                this.renderBlogs(data.blogs, false); // false = no edit/delete for non-authors
+                console.log('Returning blogs:', data.blogs.length); // Debug log
+                return data.blogs; // Return the blogs instead of rendering
             } else {
-                this.renderBlogs([], false);
+                console.log('API returned success=false'); // Debug log
+                return []; // Return empty array
             }
         } catch (error) {
             console.error('Load all blogs error:', error);
-            this.renderBlogs([], false);
+            return []; // Return empty array on error
         }
     }
 

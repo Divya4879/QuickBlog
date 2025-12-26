@@ -134,6 +134,30 @@ app.post('/api/admin/clear', async (req, res) => {
     }
 });
 
+// Debug endpoint to check Redis status
+app.get('/api/debug', async (req, res) => {
+    try {
+        // Test Redis connection
+        await client.ping();
+        
+        // Check what's in the blogs list
+        const blogs = await client.lRange('blogs', 0, -1);
+        
+        res.json({
+            redis_connected: true,
+            blogs_count: blogs.length,
+            blogs: blogs.map(b => JSON.parse(b))
+        });
+    } catch (error) {
+        res.json({
+            redis_connected: false,
+            error: error.message,
+            blogs_count: 0,
+            blogs: []
+        });
+    }
+});
+
 // Get all blogs (public endpoint)
 app.get('/api/blogs', async (req, res) => {
     try {
