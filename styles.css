@@ -309,6 +309,7 @@ body {
 .btn-cta {
     background: linear-gradient(135deg, #3b82f6 0%, #10b981 50%, #ec4899 100%);
     color: white;
+    text-decoration: none !important;
     border: none;
     padding: 1.25rem 3rem;
     border-radius: 3rem;

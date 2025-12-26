@@ -34,6 +34,11 @@ class QuickBlog {
         // Navigation
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', (e) => {
+                // Don't prevent default for Home link (let it navigate to /)
+                if (link.getAttribute('href') === '/') {
+                    return;
+                }
+                
                 e.preventDefault();
                 const section = e.target.dataset.section;
                 this.showSection(section);
@@ -41,8 +46,8 @@ class QuickBlog {
             });
         });
 
-        // Hero CTA
-        document.getElementById('startWriting').addEventListener('click', () => {
+        // Hero CTA - remove this since we changed to <a> tag
+        // document.getElementById('startWriting').addEventListener('click', () => {
             if (this.currentUser) {
                 this.showSection('create');
                 this.updateActiveNav('create');
