@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Blog - QuickBlogCLI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="nav-brand">
+                    <span class="brand-icon">✍️</span>
+                    <span class="brand-text">QuickBlogCLI</span>
+                </div>
+                <div class="nav-links">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/discover" class="nav-link">Discover</a>
+                    <a href="/create-new" class="nav-link active">Create</a>
+                    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="create" id="create">
+        <div class="container">
+            <div class="create-content">
+                <div class="create-header">
+                    <h2>Create Your Story</h2>
+                    <p>Share your thoughts with the world</p>
+                </div>
+                <form id="blogForm" class="blog-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" id="blogTitle" placeholder="Your story title..." required>
+                        </div>
+                        <div class="form-group">
+                            <select id="blogCategory" required>
+                                <option value="tech">Technology</option>
+                                <option value="design">Design</option>
+                                <option value="business">Business</option>
+                                <option value="lifestyle">Lifestyle</option>
+                                <option value="progress">Progress</option>
+                                <option value="challenge">Challenge</option>
+                                <option value="tutorial">Tutorial</option>
+                                <option value="tips">Tips</option>
+                                <option value="personal">Personal</option>
+                                <option value="career">Career</option>
+                                <option value="productivity">Productivity</option>
+                                <option value="health">Health</option>
+                                <option value="travel">Travel</option>
+                                <option value="food">Food</option>
+                                <option value="gaming">Gaming</option>
+                                <option value="music">Music</option>
+                                <option value="art">Art</option>
+                                <option value="science">Science</option>
+                                <option value="education">Education</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Tags (select 1-4):</label>
+                        <div class="tag-selection">
+                            <input type="hidden" id="blogTags" value="">
+                            <div class="tag-grid">
+                                <span class="tag-option" data-tag="tech">tech</span>
+                                <span class="tag-option" data-tag="design">design</span>
+                                <span class="tag-option" data-tag="business">business</span>
+                                <span class="tag-option" data-tag="lifestyle">lifestyle</span>
+                                <span class="tag-option" data-tag="progress">progress</span>
+                                <span class="tag-option" data-tag="challenge">challenge</span>
+                                <span class="tag-option" data-tag="tutorial">tutorial</span>
+                                <span class="tag-option" data-tag="tips">tips</span>
+                                <span class="tag-option" data-tag="review">review</span>
+                                <span class="tag-option" data-tag="personal">personal</span>
+                                <span class="tag-option" data-tag="career">career</span>
+                                <span class="tag-option" data-tag="productivity">productivity</span>
+                                <span class="tag-option" data-tag="health">health</span>
+                                <span class="tag-option" data-tag="travel">travel</span>
+                                <span class="tag-option" data-tag="food">food</span>
+                                <span class="tag-option" data-tag="gaming">gaming</span>
+                                <span class="tag-option" data-tag="music">music</span>
+                                <span class="tag-option" data-tag="art">art</span>
+                                <span class="tag-option" data-tag="science">science</span>
+                                <span class="tag-option" data-tag="education">education</span>
+                            </div>
+                            <small class="tag-counter">0/4 tags selected</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="blogContent" placeholder="Write your story here..." required></textarea>
+                        <div class="word-counter">
+                            <span id="wordCount">0</span> words
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-publish">Publish Story</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="/script.js"></script>
+</body>
+</html>

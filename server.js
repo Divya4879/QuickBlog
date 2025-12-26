@@ -215,6 +215,15 @@ app.put('/api/blogs/:username/:blogId', async (req, res) => {
     }
 });
 
+// Add route handlers for new endpoints
+app.get('/discover', (req, res) => {
+    res.sendFile(path.join(__dirname, 'discover.html'));
+});
+
+app.get('/create-new', (req, res) => {
+    res.sendFile(path.join(__dirname, 'create-new.html'));
+});
+
 app.get('/article/:slug', async (req, res) => {
     try {
         const { slug } = req.params;
@@ -504,16 +513,16 @@ app.get('/article/:slug', async (req, res) => {
         <body>
             <nav class="navbar">
                 <div class="nav-container">
-                    <a href="http://localhost:8000" class="nav-brand">
+                    <a href="/" class="nav-brand">
                         <span>✍️</span>
-                        <span>QuickBlog</span>
+                        <span>QuickBlogCLI</span>
                     </a>
                     <div class="nav-links">
-                        <a href="http://localhost:8000" class="nav-link">Home</a>
-                        <a href="http://localhost:8000#blogs" class="nav-link">Discover</a>
-                        <a href="http://localhost:8000#create" class="nav-link">Create</a>
+                        <a href="/" class="nav-link">Home</a>
+                        <a href="/discover" class="nav-link">Discover</a>
+                        <a href="/create-new" class="nav-link">Create</a>
                         <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-                        <a href="http://localhost:8000" class="btn-primary">Start Writing</a>
+                        <a href="/create-new" class="btn-primary">Start Writing</a>
                     </div>
                 </div>
             </nav>
@@ -555,8 +564,8 @@ app.get('/article/:slug', async (req, res) => {
                 
                 <footer class="article-footer">
                     <div class="footer-content">
-                        <div class="share-text">Published on QuickBlog - Terminal-first blogging</div>
-                        <a href="http://localhost:8000" class="btn-primary">Create Your Blog</a>
+                        <div class="share-text">Published on QuickBlogCLI - Terminal-first blogging</div>
+                        <a href="/create-new" class="btn-primary">Create Your Blog</a>
                     </div>
                 </footer>
             </article>

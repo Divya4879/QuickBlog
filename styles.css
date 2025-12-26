@@ -736,6 +736,13 @@ body {
     font-weight: 600;
 }
 
+.word-counter {
+    text-align: right;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+}
+
 .tag-suggestions {
     display: flex;
     flex-wrap: wrap;
