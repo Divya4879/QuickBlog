@@ -3,7 +3,10 @@ class QuickBlog {
     constructor() {
         this.currentUser = localStorage.getItem('quickblog_user');
         this.currentTheme = localStorage.getItem('quickblog_theme') || 'light';
-        this.apiEndpoint = 'http://localhost:3001/api';
+        // Auto-detect environment for API endpoint
+        this.apiEndpoint = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3001/api' 
+            : `${window.location.origin}/api`;
         this.isAuthMode = 'login';
         this.init();
     }
@@ -716,16 +719,22 @@ class QuickBlog {
             const blog = userBlogs.find(b => b.id === blogId);
             if (blog) {
                 const slug = blog.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                const articleUrl = `http://localhost:3001/article/${slug}`;
+                const articleUrl = window.location.hostname === 'localhost'
+                    ? `http://localhost:3001/article/${slug}`
+                    : `${window.location.origin}/article/${slug}`;
                 window.open(articleUrl, '_blank');
             } else {
                 // Fallback to old URL format
-                const articleUrl = `http://localhost:3001/blog/${author}/${blogId}`;
+                const articleUrl = window.location.hostname === 'localhost'
+                    ? `http://localhost:3001/blog/${author}/${blogId}`
+                    : `${window.location.origin}/blog/${author}/${blogId}`;
                 window.open(articleUrl, '_blank');
             }
         }).catch(() => {
             // Fallback to old URL format
-            const articleUrl = `http://localhost:3001/blog/${author}/${blogId}`;
+            const articleUrl = window.location.hostname === 'localhost'
+                ? `http://localhost:3001/blog/${author}/${blogId}`
+                : `${window.location.origin}/blog/${author}/${blogId}`;
             window.open(articleUrl, '_blank');
         });
     }
