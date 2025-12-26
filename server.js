@@ -306,6 +306,59 @@ app.delete('/api/blogs/:username/:blogId', async (req, res) => {
     }
 });
 
+// Simple DELETE endpoint for CLI (by blog ID only)
+app.delete('/api/blogs/:blogId', async (req, res) => {
+    try {
+        const { blogId } = req.params;
+        
+        // Find the blog in all blogs to get the username
+        const allBlogsData = await client.lRange('blogs', 0, -1);
+        let blogFound = false;
+        let username = null;
+        
+        for (const blogStr of allBlogsData) {
+            const blog = JSON.parse(blogStr);
+            if (blog.id === blogId) {
+                username = blog.author;
+                blogFound = true;
+                break;
+            }
+        }
+        
+        if (!blogFound) {
+            return res.status(404).json({ error: 'Blog not found' });
+        }
+        
+        // Delete using the existing logic
+        const blogData = await client.get(`blog:${username}:${blogId}`);
+        await client.del(`blog:${username}:${blogId}`);
+        
+        // Remove from user's blog list
+        const userBlogsData = await client.get(`user_blogs:${username}`);
+        const userBlogs = userBlogsData ? JSON.parse(userBlogsData) : [];
+        const updatedUserBlogs = userBlogs.filter(blog => blog.id !== blogId);
+        await client.set(`user_blogs:${username}`, JSON.stringify(updatedUserBlogs));
+        
+        // Remove from global blogs list
+        if (blogData) {
+            const allBlogs = await client.lRange('blogs', 0, -1);
+            const blogIndex = allBlogs.findIndex(blogStr => {
+                const blog = JSON.parse(blogStr);
+                return blog.id === blogId;
+            });
+            
+            if (blogIndex !== -1) {
+                await client.lRem('blogs', 1, allBlogs[blogIndex]);
+            }
+        }
+        
+        res.json({ success: true, message: 'Blog deleted successfully' });
+    } catch (error) {
+        console.error('Delete blog error:', error);
+        res.status(500).json({ error: 'Failed to delete blog' });
+    }
+});
+
 app.put('/api/blogs/:username/:blogId', async (req, res) => {
     try {
         const { username, blogId } = req.params;
