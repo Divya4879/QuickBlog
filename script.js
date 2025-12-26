@@ -379,14 +379,14 @@ class QuickBlog {
         
         // Show loading skeletons
         setTimeout(async () => {
+            // Always load all blogs for everyone to see (whether signed in or not)
+            const allBlogs = await this.loadAllBlogs();
+            this.renderBlogs(allBlogs, false); // Show all blogs without edit buttons initially
+            
+            // If user is logged in, also load their blogs and show edit buttons for their own blogs
             if (this.currentUser) {
-                // Load user's blogs
-                const userBlogs = await this.getUserBlogs();
-                this.renderBlogs(userBlogs, true); // true = show edit/delete buttons
-            } else {
-                // Load all blogs for everyone to see
-                const allBlogs = await this.loadAllBlogs();
-                this.renderBlogs(allBlogs, false); // false = no edit/delete buttons
+                // The renderBlogs function will show edit/delete buttons only for blogs authored by currentUser
+                this.renderBlogs(allBlogs, true); // true = check for edit/delete permissions per blog
             }
         }, 1000);
     }
@@ -407,14 +407,14 @@ class QuickBlog {
         }
     }
 
-    renderBlogs(blogs, showActions = false) {
+    renderBlogs(blogs, showActions = false, append = false) {
         const blogsGrid = document.getElementById('blogsGrid');
         if (!blogsGrid) {
             console.log('blogsGrid element not found');
             return;
         }
         
-        if (blogs.length === 0) {
+        if (blogs.length === 0 && !append) {
             blogsGrid.innerHTML = `
                 <div class="no-blogs">
                     <h3>No stories found</h3>
@@ -424,7 +424,7 @@ class QuickBlog {
             return;
         }
 
-        blogsGrid.innerHTML = blogs.map(blog => {
+        const blogHTML = blogs.map(blog => {
             const wordCount = blog.content.split(/\s+/).length;
             const readTime = Math.max(1, Math.ceil(wordCount / 100));
             return `
@@ -452,6 +452,13 @@ class QuickBlog {
             </article>
             `;
         }).join('');
+
+        // Set or append the HTML
+        if (append) {
+            blogsGrid.innerHTML += blogHTML;
+        } else {
+            blogsGrid.innerHTML = blogHTML;
+        }
 
         // Add blog card styles
         this.addBlogCardStyles();
