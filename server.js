@@ -306,6 +306,71 @@ app.delete('/api/blogs/:username/:blogId', async (req, res) => {
     }
 });
 
+// Alternative DELETE endpoint using POST (Vercel workaround)
+app.post('/api/blogs/:blogId/delete', async (req, res) => {
+    try {
+        const { blogId } = req.params;
+        console.log(`Attempting to delete blog with ID: ${blogId} via POST`);
+        
+        // Find the blog in all blogs to get the username
+        const allBlogsData = await client.lRange('blogs', 0, -1);
+        let blogFound = false;
+        let username = null;
+        let fullBlogData = null;
+        
+        console.log(`Searching through ${allBlogsData.length} blogs`);
+        
+        for (const blogStr of allBlogsData) {
+            const blog = JSON.parse(blogStr);
+            console.log(`Checking blog ID: ${blog.id} against ${blogId}`);
+            
+            // Check both full ID and partial ID match
+            if (blog.id === blogId || blog.id.startsWith(blogId)) {
+                username = blog.author;
+                fullBlogData = blog;
+                blogFound = true;
+                console.log(`Found matching blog: ${blog.id} by ${username}`);
+                break;
+            }
+        }
+        
+        if (!blogFound) {
+            console.log(`Blog not found with ID: ${blogId}`);
+            return res.status(404).json({ error: 'Blog not found' });
+        }
+        
+        const fullBlogId = fullBlogData.id;
+        console.log(`Deleting blog: ${fullBlogId}`);
+        
+        // Delete using the existing logic
+        await client.del(`blog:${username}:${fullBlogId}`);
+        
+        // Remove from user's blog list
+        const userBlogsData = await client.get(`user_blogs:${username}`);
+        const userBlogs = userBlogsData ? JSON.parse(userBlogsData) : [];
+        const updatedUserBlogs = userBlogs.filter(blog => blog.id !== fullBlogId);
+        await client.set(`user_blogs:${username}`, JSON.stringify(updatedUserBlogs));
+        
+        // Remove from global blogs list
+        const allBlogs = await client.lRange('blogs', 0, -1);
+        const blogIndex = allBlogs.findIndex(blogStr => {
+            const blog = JSON.parse(blogStr);
+            return blog.id === fullBlogId;
+        });
+        
+        if (blogIndex !== -1) {
+            await client.lRem('blogs', 1, allBlogs[blogIndex]);
+            console.log(`Removed blog from global list at index: ${blogIndex}`);
+        }
+        
+        console.log(`Successfully deleted blog: ${fullBlogId}`);
+        res.json({ success: true, message: 'Blog deleted successfully' });
+    } catch (error) {
+        console.error('Delete blog error:', error);
+        res.status(500).json({ error: 'Failed to delete blog' });
+    }
+});
+
 // Simple DELETE endpoint for CLI (by blog ID only)
 app.delete('/api/blogs/:blogId', async (req, res) => {
     try {
