@@ -218,11 +218,11 @@ app.put('/api/blogs/:username/:blogId', async (req, res) => {
 // Add route handlers for new endpoints
 // Add route handlers for new endpoints
 app.get('/discover', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'discover.html'));
 });
 
 app.get('/create-new', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'create-new.html'));
 });
 
 app.get('/article/:slug', async (req, res) => {

@@ -32,18 +32,10 @@ class QuickBlog {
         });
 
         // Navigation
+        // Navigation - remove section-based navigation since we have separate pages
         document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Don't prevent default for Home link (let it navigate to /)
-                if (link.getAttribute('href') === '/') {
-                    return;
-                }
-                
-                e.preventDefault();
-                const section = e.target.dataset.section;
-                this.showSection(section);
-                this.updateActiveNav(section);
-            });
+            // Let all navigation links work normally (no preventDefault)
+            // They will navigate to their respective pages
         });
 
         // Hero CTA - remove this since we changed to <a> tag
