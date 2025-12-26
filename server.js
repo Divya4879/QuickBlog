@@ -2,6 +2,7 @@ const express = require('express');
 const redis = require('redis');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+const path = require('path');
 
 const app = express();
 const PORT = 3001;
@@ -12,6 +13,9 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
+
+// Serve static files
+app.use(express.static(__dirname));
 
 // Redis client setup
 const client = redis.createClient({
@@ -87,9 +91,29 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Check title uniqueness
+app.post('/api/blogs/check-title', async (req, res) => {
+    try {
+        const { normalizedTitle } = req.body;
+        
+        // Get all blog titles and normalize them
+        const blogs = await client.lRange('blogs', 0, -1);
+        const existingTitles = blogs.map(blogStr => {
+            const blog = JSON.parse(blogStr);
+            return blog.title.toLowerCase().replace(/[^a-z]/g, '');
+        });
+        
+        const available = !existingTitles.includes(normalizedTitle);
+        res.json({ success: true, available });
+    } catch (error) {
+        console.error('Title check error:', error);
+        res.status(500).json({ success: false, error: 'Failed to check title' });
+    }
+});
+
 app.post('/api/blogs', async (req, res) => {
     try {
-        const { username, title, content, category, tags } = req.body;
+        const { username, title, content, tags } = req.body;
         
         // Validate word count
         const wordCount = content.trim().split(/\s+/).length;
@@ -110,11 +134,10 @@ app.post('/api/blogs', async (req, res) => {
             id: blogId,
             title,
             content,
-            category,
             tags: tags || [],
             author: username,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            created_at: new Date().toLocaleString(),
+            updated_at: new Date().toLocaleString()
         };
         
         // Store blog with slug for SEO-friendly URLs
@@ -185,7 +208,7 @@ app.delete('/api/blogs/:username/:blogId', async (req, res) => {
 app.put('/api/blogs/:username/:blogId', async (req, res) => {
     try {
         const { username, blogId } = req.params;
-        const { title, content, category } = req.body;
+        const { title, content, tags } = req.body;
         
         // Get existing blog
         const existingBlogData = await client.get(`blog:${username}:${blogId}`);
@@ -200,8 +223,8 @@ app.put('/api/blogs/:username/:blogId', async (req, res) => {
             ...existingBlog,
             title: title || existingBlog.title,
             content: content || existingBlog.content,
-            category: category || existingBlog.category,
-            updated_at: new Date().toISOString()
+            tags: tags || existingBlog.tags,
+            updated_at: new Date().toLocaleString()
         };
         
         await client.set(`blog:${username}:${blogId}`, JSON.stringify(updatedBlog));
@@ -219,6 +242,10 @@ app.put('/api/blogs/:username/:blogId', async (req, res) => {
 
 // Add route handlers for new endpoints
 // Add route handlers for new endpoints
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 app.get('/discover', (req, res) => {
     res.sendFile(path.join(__dirname, 'discover.html'));
 });

@@ -11,12 +11,20 @@ class QuickBlog {
         this.init();
     }
 
-    init() {
+    async init() {
         this.setupTheme();
         this.setupEventListeners();
         this.loadSampleBlogs();
         this.updateUI();
         this.setupScrollEffects();
+        
+        // Check if we're in edit mode
+        const urlParams = new URLSearchParams(window.location.search);
+        const editBlogId = urlParams.get('edit');
+        
+        if (editBlogId && this.currentUser) {
+            await this.loadBlogForEditing(editBlogId);
+        }
     }
 
     setupTheme() {
@@ -30,8 +38,10 @@ class QuickBlog {
     setupEventListeners() {
         // Theme toggle - check if element exists first
         const themeToggle = document.getElementById('themeToggle');
+        console.log('Theme toggle element found:', themeToggle); // Debug log
         if (themeToggle) {
             themeToggle.addEventListener('click', () => {
+                console.log('Theme toggle clicked!'); // Debug log
                 this.toggleTheme();
             });
         }
@@ -42,49 +52,72 @@ class QuickBlog {
         // CTA buttons are now anchor tags, no event listeners needed
 
         // Auth modal
-        document.getElementById('loginBtn').addEventListener('click', () => {
-            if (this.currentUser) {
-                this.showUserMenu();
-            } else {
-                this.showAuthModal();
-            }
-        });
+        const loginBtn = document.getElementById('loginBtn');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', () => {
+                if (this.currentUser) {
+                    this.showUserMenu();
+                } else {
+                    this.showAuthModal();
+                }
+            });
+        }
 
         document.querySelector('.modal-close').addEventListener('click', () => {
             this.hideAuthModal();
         });
 
-        document.querySelector('.modal-backdrop').addEventListener('click', () => {
-            this.hideAuthModal();
-        });
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+            modalBackdrop.addEventListener('click', () => {
+                this.hideAuthModal();
+            });
+        }
 
-        document.getElementById('switchAuth').addEventListener('click', () => {
-            this.toggleAuthMode();
-        });
+        const switchAuth = document.getElementById('switchAuth');
+        if (switchAuth) {
+            switchAuth.addEventListener('click', () => {
+                this.toggleAuthMode();
+            });
+        }
 
-        document.getElementById('authForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.handleAuth();
-        });
+        const authForm = document.getElementById('authForm');
+        if (authForm) {
+            authForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleAuth();
+            });
+        }
 
         // Blog form
-        document.getElementById('blogForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.handleBlogSubmit();
-        });
+        const blogForm = document.getElementById('blogForm');
+        if (blogForm) {
+            blogForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleBlogSubmit();
+            });
+        }
 
-        document.getElementById('saveDraft').addEventListener('click', () => {
-            this.saveDraft();
-        });
+        const saveDraft = document.getElementById('saveDraft');
+        if (saveDraft) {
+            saveDraft.addEventListener('click', () => {
+                this.saveDraft();
+            });
+        }
 
         // Word counter
-        document.getElementById('blogContent').addEventListener('input', (e) => {
-            this.updateWordCount(e.target.value);
-        });
+        const blogContent = document.getElementById('blogContent');
+        if (blogContent) {
+            blogContent.addEventListener('input', (e) => {
+                this.updateWordCount(e.target.value);
+            });
+        }
 
         // Tag selection
         document.addEventListener('click', (e) => {
+            console.log('Click detected on:', e.target); // Debug log
             if (e.target.classList.contains('tag-option')) {
+                console.log('Tag clicked:', e.target.dataset.tag); // Debug log
                 this.toggleTag(e.target);
             }
         });
@@ -126,25 +159,31 @@ class QuickBlog {
         });
 
         // Setup FAQ toggles
-        document.querySelectorAll('.faq-question').forEach(question => {
-            question.addEventListener('click', () => {
-                const faqItem = question.parentElement;
-                const isActive = faqItem.classList.contains('active');
-                
-                // Close all other FAQs
-                document.querySelectorAll('.faq-item').forEach(item => {
-                    item.classList.remove('active');
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        console.log('FAQ questions found:', faqQuestions.length); // Debug log
+        if (faqQuestions.length > 0) {
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    console.log('FAQ clicked!'); // Debug log
+                    const faqItem = question.parentElement;
+                    const isActive = faqItem.classList.contains('active');
+                    
+                    // Close all other FAQs
+                    document.querySelectorAll('.faq-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // Toggle current FAQ
+                    if (!isActive) {
+                        faqItem.classList.add('active');
+                    }
                 });
-                
-                // Toggle current FAQ
-                if (!isActive) {
-                    faqItem.classList.add('active');
-                }
             });
-        });
+        }
     }
 
     toggleTheme() {
+        console.log('Theme toggle clicked!'); // Debug log
         this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
         localStorage.setItem('quickblog_theme', this.currentTheme);
         this.setupTheme();
@@ -160,7 +199,13 @@ class QuickBlog {
         document.querySelectorAll('main > section').forEach(section => {
             section.style.display = 'none';
         });
-        document.getElementById(sectionId).style.display = 'block';
+        
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.style.display = 'block';
+        } else {
+            console.log('Section not found:', sectionId);
+        }
         
         // Smooth scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -252,7 +297,6 @@ class QuickBlog {
 
         const title = document.getElementById('blogTitle')?.value?.trim() || '';
         const content = document.getElementById('blogContent')?.value?.trim() || '';
-        const category = document.getElementById('blogCategory')?.value || 'tech';
         const tagsInput = document.getElementById('blogTags');
         
         // Parse tags from hidden input
@@ -261,6 +305,24 @@ class QuickBlog {
         if (!title || !content) {
             this.showNotification('Please fill in title and content', 'error');
             return;
+        }
+
+        // Check title uniqueness (normalize: lowercase, remove spaces/symbols/numbers)
+        const normalizedTitle = title.toLowerCase().replace(/[^a-z]/g, '');
+        try {
+            const titleCheckResponse = await fetch(`${this.apiEndpoint}/blogs/check-title`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ normalizedTitle })
+            });
+            
+            const titleCheck = await titleCheckResponse.json();
+            if (!titleCheck.available) {
+                this.showNotification('A blog with this title already exists. Please choose a different title.', 'error');
+                return;
+            }
+        } catch (error) {
+            console.log('Title check failed, proceeding anyway:', error);
         }
 
         // Validate word count
@@ -277,12 +339,12 @@ class QuickBlog {
         let success = false;
         if (this.editingBlogId) {
             // Update existing blog
-            success = await this.updateBlog(this.editingBlogId, title, content, category, tags);
+            success = await this.updateBlog(this.editingBlogId, title, content, tags);
             this.editingBlogId = null;
             document.querySelector('#blogForm button[type="submit"]').textContent = 'Publish Story';
         } else {
             // Create new blog
-            success = await this.createBlog(title, content, category, tags);
+            success = await this.createBlog(title, content, tags);
         }
 
         if (success) {
@@ -321,6 +383,9 @@ class QuickBlog {
                 // Load all blogs for everyone to see
                 this.loadAllBlogs();
             }
+        }, 1000);
+    }
+
     async loadAllBlogs() {
         try {
             const response = await fetch(`${this.apiEndpoint}/blogs`);
@@ -339,6 +404,10 @@ class QuickBlog {
 
     renderBlogs(blogs, showActions = false) {
         const blogsGrid = document.getElementById('blogsGrid');
+        if (!blogsGrid) {
+            console.log('blogsGrid element not found');
+            return;
+        }
         
         if (blogs.length === 0) {
             blogsGrid.innerHTML = `
@@ -350,11 +419,13 @@ class QuickBlog {
             return;
         }
 
-        blogsGrid.innerHTML = blogs.map(blog => `
-            <article class="blog-card" data-category="${blog.category}" onclick="window.quickBlog.openArticle('${blog.author || this.currentUser}', '${blog.id}')" style="cursor: pointer;">
-                <div class="blog-header">
-                    <span class="blog-category">${this.formatCategory(blog.category)}</span>
-                    <span class="blog-read-time">${blog.readTime || '3 min read'}</span>
+        blogsGrid.innerHTML = blogs.map(blog => {
+            const wordCount = blog.content.split(/\s+/).length;
+            const readTime = Math.max(1, Math.ceil(wordCount / 100));
+            return `
+            <article class="blog-card" data-tags="${blog.tags ? blog.tags.join(',') : ''}" onclick="window.quickBlog.openArticle('${blog.author || this.currentUser}', '${blog.id}')" style="cursor: pointer;">
+                <div class="blog-header" style="display: flex; justify-content: flex-end; align-items: center;">
+                    <span class="blog-read-time">${readTime} min read</span>
                 </div>
                 <h3 class="blog-title">${this.escapeHtml(blog.title)}</h3>
                 <p class="blog-excerpt">${this.escapeHtml(blog.content.substring(0, 150))}...</p>
@@ -374,7 +445,8 @@ class QuickBlog {
                     </div>
                 </div>
             </article>
-        `).join('');
+            `;
+        }).join('');
 
         // Add blog card styles
         this.addBlogCardStyles();
@@ -498,11 +570,13 @@ class QuickBlog {
         document.head.appendChild(style);
     }
 
-    filterBlogs(category) {
+    filterBlogs(tag) {
         const blogCards = document.querySelectorAll('.blog-card');
         
         blogCards.forEach(card => {
-            if (category === 'all' || card.dataset.category === category) {
+            const blogTags = card.dataset.tags ? card.dataset.tags.split(',') : [];
+            
+            if (tag === 'all' || blogTags.includes(tag)) {
                 card.style.display = 'block';
                 card.style.animation = 'fadeIn 0.3s ease';
             } else {
@@ -585,14 +659,14 @@ class QuickBlog {
         }
     }
 
-    async createBlog(title, content, category, tags) {
+    async createBlog(title, content, tags) {
         if (!this.currentUser) return false;
         
         try {
             const response = await fetch(`${this.apiEndpoint}/blogs`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: this.currentUser, title, content, category, tags })
+                body: JSON.stringify({ username: this.currentUser, title, content, tags })
             });
             const result = await response.json();
             if (response.ok) {
@@ -651,8 +725,16 @@ class QuickBlog {
     }
 
     toggleTag(tagElement) {
+        console.log('toggleTag called with:', tagElement); // Debug log
         const tag = tagElement.dataset.tag;
         const tagsInput = document.getElementById('blogTags');
+        console.log('tagsInput found:', tagsInput); // Debug log
+        
+        if (!tagsInput) {
+            console.log('blogTags input not found!'); // Debug log
+            return;
+        }
+        
         const currentTags = tagsInput.value ? tagsInput.value.split(',').map(t => t.trim()) : [];
         
         if (tagElement.classList.contains('selected')) {
@@ -745,6 +827,38 @@ class QuickBlog {
         }
     }
 
+    async loadBlogForEditing(blogId) {
+        try {
+            const blogs = await this.getUserBlogs();
+            const blog = blogs.find(b => b.id === blogId);
+            
+            if (blog) {
+                // Fill the form with existing data
+                const titleInput = document.getElementById('blogTitle');
+                const contentInput = document.getElementById('blogContent');
+                
+                if (titleInput) titleInput.value = blog.title;
+                if (contentInput) contentInput.value = blog.content;
+                
+                // Set tags
+                const tagsInput = document.getElementById('blogTags');
+                if (tagsInput && blog.tags) {
+                    tagsInput.value = blog.tags.join(',');
+                    this.updateTagCounter();
+                }
+                
+                // Store the blog ID for updating
+                this.editingBlogId = blogId;
+                
+                // Change button text
+                const submitBtn = document.querySelector('#blogForm button[type="submit"]');
+                if (submitBtn) submitBtn.textContent = 'Update Blog';
+            }
+        } catch (error) {
+            console.error('Failed to load blog for editing:', error);
+        }
+    }
+
     async editBlog(blogId) {
         if (!this.currentUser) return;
         
@@ -754,11 +868,26 @@ class QuickBlog {
         if (!blog) return;
         
         // Fill the form with existing data
-        document.getElementById('blogTitle').value = blog.title;
-        document.getElementById('blogContent').value = blog.content;
-        document.getElementById('blogCategory').value = blog.category;
+        const titleInput = document.getElementById('blogTitle');
+        const contentInput = document.getElementById('blogContent');
         
-        // Switch to create section
+        if (titleInput) titleInput.value = blog.title;
+        if (contentInput) contentInput.value = blog.content;
+        
+        // Set tags
+        const tagsInput = document.getElementById('blogTags');
+        if (tagsInput && blog.tags) {
+            tagsInput.value = blog.tags.join(',');
+            this.updateTagCounter();
+        }
+        
+        // Switch to create section (redirect if not on create page)
+        if (!document.getElementById('create')) {
+            // Pass blog ID in URL for editing
+            window.location.href = `create-new.html?edit=${blogId}`;
+            return;
+        }
+        
         this.showSection('create');
         this.updateActiveNav('create');
         
@@ -770,14 +899,14 @@ class QuickBlog {
         submitBtn.textContent = 'Update Blog';
     }
 
-    async updateBlog(blogId, title, content, category) {
+    async updateBlog(blogId, title, content, tags) {
         if (!this.currentUser) return false;
         
         try {
             const response = await fetch(`${this.apiEndpoint}/blogs/${this.currentUser}/${blogId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, content, category })
+                body: JSON.stringify({ title, content, tags })
             });
             if (response.ok) {
                 this.showNotification('Blog updated successfully', 'success');
