@@ -519,11 +519,7 @@ app.get('/article/:slug', async (req, res) => {
                         <span>QuickBlogCLI</span>
                     </a>
                     <div class="nav-links">
-                        <a href="/" class="nav-link">Home</a>
-                        <a href="/discover" class="nav-link">Discover</a>
-                        <a href="/create-new" class="nav-link">Create</a>
                         <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-                        <a href="/create-new" class="btn-primary">Start Writing</a>
                     </div>
                 </div>
             </nav>
@@ -566,7 +562,6 @@ app.get('/article/:slug', async (req, res) => {
                 <footer class="article-footer">
                     <div class="footer-content">
                         <div class="share-text">Published on QuickBlogCLI - Terminal-first blogging</div>
-                        <a href="/create-new" class="btn-primary">Create Your Blog</a>
                     </div>
                 </footer>
             </article>

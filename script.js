@@ -338,32 +338,23 @@ class QuickBlog {
                 const userBlogs = await this.getUserBlogs();
                 this.renderBlogs(userBlogs, true); // true = show edit/delete buttons
             } else {
-                // Show sample blogs for non-logged users
-                const sampleBlogs = [
-                    {
-                        id: 1,
-                        title: "The Future of Web Development: What's Next?",
-                        content: "Exploring emerging technologies, frameworks, and methodologies that are shaping the future of web development. From AI-powered coding assistants to serverless architectures, discover what's coming next in our industry.",
-                        author: "Sarah Chen",
-                        category: "tech",
-                        created_at: "2024-12-24T10:00:00Z",
-                        readTime: "5 min read",
-                        likes: 234
-                    },
-                    {
-                        id: 2,
-                        title: "Design Systems That Scale: Lessons from Industry Leaders",
-                        content: "How companies like Airbnb, Shopify, and Atlassian built design systems that support thousands of designers and developers. Learn the principles, tools, and processes that make design systems successful at scale.",
-                        author: "Marcus Rodriguez",
-                        category: "design",
-                        created_at: "2024-12-23T15:30:00Z",
-                        readTime: "8 min read",
-                        likes: 189
-                    }
-                ];
-                this.renderBlogs(sampleBlogs, false);
+                // Load all blogs for everyone to see
+                this.loadAllBlogs();
             }
-        }, 1500);
+    async loadAllBlogs() {
+        try {
+            const response = await fetch(`${this.apiEndpoint}/blogs`);
+            const data = await response.json();
+            
+            if (data.success) {
+                this.renderBlogs(data.blogs, false); // false = no edit/delete for non-authors
+            } else {
+                this.renderBlogs([], false);
+            }
+        } catch (error) {
+            console.error('Load all blogs error:', error);
+            this.renderBlogs([], false);
+        }
     }
 
     renderBlogs(blogs, showActions = false) {
