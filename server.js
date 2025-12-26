@@ -310,7 +310,7 @@ app.delete('/api/blogs/:username/:blogId', async (req, res) => {
 app.delete('/api/blogs/:blogId', async (req, res) => {
     try {
         const { blogId } = req.params;
-        console.log(`Attempting to delete blog with ID: ${blogId}`);
+        console.log(`Attempting to delete blog with ID: ${blogId} - v2`);
         
         // Find the blog in all blogs to get the username
         const allBlogsData = await client.lRange('blogs', 0, -1);
