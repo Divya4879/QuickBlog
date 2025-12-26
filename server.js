@@ -306,6 +306,11 @@ app.delete('/api/blogs/:username/:blogId', async (req, res) => {
     }
 });
 
+// Test endpoint
+app.get('/api/test-delete/:blogId', async (req, res) => {
+    res.json({ message: `Delete test for blog ${req.params.blogId}`, success: true });
+});
+
 // Alternative DELETE endpoint using POST (Vercel workaround)
 app.post('/api/blogs/:blogId/delete', async (req, res) => {
     try {
