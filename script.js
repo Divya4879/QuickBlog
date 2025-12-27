@@ -791,8 +791,8 @@ class QuickBlog {
     }
 
     openArticle(author, blogId) {
-        // Use live site URL for blog links
-        const blogViewUrl = `https://quick-blog-dymdcu1rk-divya4879s-projects.vercel.app/blog-view.html?id=${blogId}`;
+        // Use current site origin for blog links
+        const blogViewUrl = `${window.location.origin}/blog-view.html?id=${blogId}`;
         window.open(blogViewUrl, '_blank');
     }
 
