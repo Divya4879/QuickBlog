@@ -35,11 +35,15 @@
             <div class="container" style="margin-top: 5rem;">
                 <div class="hero-content">
                     <h1 class="hero-title">
-                        <span class="gradient-text">Blog From Your Terminal Get Shareable Links</span><br>
+                        <span class="gradient-text">Write anywhere<br>
+                            Publish instantly<br>
+                            Share everywhere</span><br>
                     </h1>
                     <p class="hero-subtitle">
-                        Professional CLI tool for developers. Write, publish, and manage blogs without leaving your terminal. 
-                        Beautiful formatting, session management, and instant shareable links.
+                        A simple yet powerful CLI tool for anyone with something to share.
+                        Write, format, and publish blogs easily from your terminal, no technical expertise needed.
+
+                        Beautiful formatting & instant links, because real people are sharing.
                     </p>
                     <div class="hero-cta">
                         <a href="/create-new.html" class="btn-cta">
@@ -75,14 +79,15 @@
                         <div class="feature-icon">⚡</div>
                         <h3>Lightning-Fast Commands</h3>
                         <p>Create, read, edit, delete, and list blogs with beautiful spinners and instant feedback. Full CRUD operations with session management and error handling.</p>
-                        <div class="feature-stat">quickblog create | list | read</div>
+                        <div class="feature-stat">quickblog create | list | read | delete</div>
                     </div>
                     
                     <div class="feature-card">
-                        <div class="feature-icon">🔗</div>
-                        <h3>Instant Shareable Links</h3>
-                        <p>Every blog gets a clean URL immediately. Share on social media, embed in docs, or send to colleagues. Links work forever with SEO-friendly slugs.</p>
-                        <div class="feature-stat">SEO-optimized URLs</div>
+                        <div class="feature-icon">🔒</div>
+                        <h3>Smart Session Security</h3>
+                        <p>Only edit/delete blogs from your current session. Secure by design with local config storage and session isolation. Your
+blogs, your control.</p>
+                        <div class="feature-stat">Session-based protection</div>
                     </div>
                 </div>
             </div>
@@ -97,11 +102,11 @@
                 <div class="faq-grid">
                     <div class="faq-item">
                         <div class="faq-question">
-                            <h3>How does the CLI actually work?</h3>
+                            <h3>How do I install and use the CLI?</h3>
                             <span class="faq-toggle">+</span>
                         </div>
                         <div class="faq-answer">
-                            <p>Install via npm, run `quickblog init` for a beautiful welcome, then use commands like `quickblog create`, `quickblog list`, `quickblog read <id>`. Each command has gorgeous formatting with colors, tables, and professional feedback.</p>
+                            <p>Install via npm: `npm install quickblog-api`. Run `quickblog init` for setup, then use commands like `quickblog create`, `quickblog list`, `quickblog read <id>`. All commands have beautiful formatting with rainbow ASCII art and professional tables.</p>
                         </div>
                     </div>
                     <div class="faq-item">
@@ -110,34 +115,34 @@
                             <span class="faq-toggle">+</span>
                         </div>
                         <div class="faq-answer">
-                            <p>We use figlet for ASCII art, gradient-string for rainbow effects, boxen for rounded borders, cli-table3 for professional tables, and picocolors for fast styling. It looks like a premium enterprise tool.</p>
+                            <p>We use figlet for ASCII art, gradient-string for rainbow effects, boxen for rounded cyan borders, cli-table3 for professional tables, and picocolors for fast styling. Plus ora spinners and beautiful formatting throughout.</p>
                         </div>
                     </div>
                     <div class="faq-item">
                         <div class="faq-question">
-                            <h3>How does session management keep my blogs secure?</h3>
+                            <h3>How does session management work?</h3>
                             <span class="faq-toggle">+</span>
                         </div>
                         <div class="faq-answer">
-                            <p>You can only edit/delete blogs created in your current CLI session. This prevents accidental modifications of others' content while allowing full control over your own blogs. Session data is stored locally with the `conf` package.</p>
+                            <p>You can only edit/delete blogs created in your current CLI session. Session data is stored locally using the `conf` package. This prevents accidental modifications while giving you full control over your own content.</p>
                         </div>
                     </div>
                     <div class="faq-item">
                         <div class="faq-question">
-                            <h3>What's the tech stack behind QuickBlog?</h3>
+                            <h3>What's the backend architecture?</h3>
                             <span class="faq-toggle">+</span>
                         </div>
                         <div class="faq-answer">
-                            <p>Node.js + Express backend, Redis for data storage, Vercel for hosting, Commander.js for CLI, Axios for API calls, and premium terminal UI libraries. Production-ready architecture with proper error handling.</p>
+                            <p>Node.js + Express server with Redis Cloud database, deployed on Vercel. Full REST API with GET, POST, PUT, DELETE endpoints. Commander.js powers the CLI with Axios for API calls.</p>
                         </div>
                     </div>
                     <div class="faq-item">
                         <div class="faq-question">
-                            <h3>Can I really manage everything from the terminal?</h3>
+                            <h3>What CLI commands are available?</h3>
                             <span class="faq-toggle">+</span>
                         </div>
                         <div class="faq-answer">
-                            <p>Absolutely. Create blogs with interactive prompts, list with beautiful tables, read with formatted display, edit with confirmation, delete with safety checks, and check status. Complete blog management without touching a browser.</p>
+                            <p>Complete CRUD operations: `init`, `create`, `list`, `read <id>`, `edit <id>`, `delete <id>`, `status`, `test`, `clear`. Each command has beautiful output, error handling, and interactive prompts where needed.</p>
                         </div>
                     </div>
                     <div class="faq-item">
@@ -238,12 +243,7 @@
                             <span class="btn-icon">👀</span>
                         </a>
                     </div>
-                    <div class="cta-features">
-                        <span>✓ No signup required</span>
-                        <span>✓ Beautiful terminal UI</span>
-                        <span>✓ Session management</span>
-                        <span>✓ Instant publishing</span>
-                    </div>
+                    
                 </div>
             </div>
         </section>
