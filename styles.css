@@ -1158,8 +1158,9 @@ body {
 .welcome-box {
     color: #06b6d4;
     font-size: 0.8rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     line-height: 1.4;
+    padding: 0.5rem 0;
 }
 
 .blog-table {
@@ -1167,6 +1168,13 @@ body {
     font-size: 0.75rem;
     line-height: 1.4;
     white-space: pre;
+    margin-bottom: 1.5rem;
+}
+
+.create-form {
+    color: #fff;
+    font-size: 0.875rem;
+    line-height: 1.6;
 }
 
 .cursor {
