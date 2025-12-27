@@ -6,4 +6,4 @@ redis-stable*
 redis/
 .env
 .DS_Store
-start.sh
+

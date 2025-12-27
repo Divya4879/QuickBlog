@@ -791,7 +791,7 @@ class QuickBlog {
     }
 
     openArticle(author, blogId) {
-        // Use current site origin for blog links
+        // Use current origin so it works from any Vercel deployment
         const blogViewUrl = `${window.location.origin}/blog-view.html?id=${blogId}`;
         window.open(blogViewUrl, '_blank');
     }

@@ -265,9 +265,15 @@
                     throw new Error('Blog ID not provided');
                 }
                 
-                // Use the same origin API endpoint to avoid CORS issues
-                const apiUrl = `${window.location.origin}/api/blogs`;
-                const response = await fetch(apiUrl);
+                // Try current deployment first, then fallback to known working API
+                let apiUrl = `${window.location.origin}/api/blogs`;
+                let response = await fetch(apiUrl).catch(() => null);
+                
+                if (!response || !response.ok) {
+                    // Fallback to known working API deployment
+                    apiUrl = 'https://quick-blog-dymdcu1rk-divya4879s-projects.vercel.app/api/blogs';
+                    response = await fetch(apiUrl);
+                }
                 
                 if (!response.ok) {
                     throw new Error('Failed to fetch blogs');
