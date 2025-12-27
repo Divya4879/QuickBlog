@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - QuickBlog</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✍️</text></svg>">
+    <style>
+        /* Dark theme variables */
+        [data-theme="dark"] {
+            --primary: #60a5fa;
+            --secondary: #34d399;
+            --accent: #f472b6;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --border: #334155;
+            --gradient-primary: linear-gradient(135deg, #60a5fa 0%, #34d399 50%, #f472b6 100%);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .blog-container {
+            max-width: 800px;
+            margin: 6rem auto 2rem;
+            background: var(--bg-primary);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+        }
+        
+        .blog-header {
+            padding: 3rem 3rem 2rem;
+            background: var(--gradient-primary);
+            color: white;
+            position: relative;
+        }
+
+        .blog-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .blog-header > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .blog-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .author-avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            border: 2px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .blog-stats {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .blog-content {
+            padding: 3rem;
+            background: var(--bg-primary);
+        }
+        
+        .blog-tags {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            background: var(--bg-secondary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .tag:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+        
+        .blog-body {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+        
+        .blog-body p {
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-body p:first-child::first-letter {
+            font-size: 3.5rem;
+            font-weight: 700;
+            float: left;
+            line-height: 1;
+            margin: 0.1rem 0.5rem 0 0;
+            color: var(--primary);
+        }
+        
+        .loading, .error {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-secondary);
+        }
+        
+        .error {
+            color: var(--danger);
+        }
+
+        /* Enhanced background */
+        body {
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Theme toggle styles */
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .theme-icon {
+            font-size: 1.2rem;
+        }
+
+        [data-theme="dark"] .theme-icon {
+            filter: brightness(1.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .blog-container {
+                margin: 5rem 1rem 2rem;
+            }
+            
+            .blog-header {
+                padding: 2rem;
+            }
+            
+            .blog-content {
+                padding: 2rem;
+            }
+            
+            .blog-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar glass">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">✍️</span>
+                <span class="brand-text">QuickBlog</span>
+            </div>
+            <div class="nav-center">
+                <a href="/index.html" class="nav-link">Home</a>
+                <a href="/discover.html" class="nav-link">Discover</a>
+                <a href="/create-new.html" class="nav-link">Create</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="blog-container">
+            <div id="blogContent" class="loading">
+                <h3>Loading blog...</h3>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadBlog() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const blogId = urlParams.get('id');
+                
+                if (!blogId) {
+                    throw new Error('Blog ID not provided');
+                }
+                
+                // Try local API first, then live API
+                let apiUrl = 'http://localhost:3001/api/blogs';
+                let response = await fetch(apiUrl).catch(() => null);
+                
+                if (!response || !response.ok) {
+                    // Fallback to live API
+                    apiUrl = 'https://quick-blog-dymdcu1rk-divya4879s-projects.vercel.app/api/blogs';
+                    response = await fetch(apiUrl);
+                }
+                
+                const data = await response.json();
+                const blog = data.blogs.find(b => b.id === blogId);
+                
+                if (!blog) {
+                    throw new Error('Blog not found');
+                }
+                
+                // Calculate read time
+                const wordCount = blog.content.split(/\s+/).length;
+                const readTime = Math.max(1, Math.ceil(wordCount / 200));
+                
+                // Format date
+                const date = new Date(blog.created_at).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                // Render blog
+                document.getElementById('blogContent').innerHTML = `
+                    <div class="blog-header">
+                        <h1 class="blog-title">${blog.title}</h1>
+                        <div class="blog-meta">
+                            <div class="author-info">
+                                <div class="author-avatar">${blog.author.charAt(0).toUpperCase()}</div>
+                                <div>
+                                    <h3>${blog.author}</h3>
+                                    <div>${date}</div>
+                                </div>
+                            </div>
+                            <div class="blog-stats">
+                                <span>${readTime} min read</span>
+                                <span>${wordCount} words</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="blog-content">
+                        ${blog.tags && blog.tags.length > 0 ? `
+                            <div class="blog-tags">
+                                ${blog.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="blog-body">
+                            ${blog.content.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('')}
+                        </div>
+                    </div>
+                `;
+                
+                // Update page title
+                document.title = `${blog.title} - QuickBlog`;
+                
+            } catch (error) {
+                document.getElementById('blogContent').innerHTML = `
+                    <div class="error">
+                        <h3>Error loading blog</h3>
+                        <p>${error.message}</p>
+                        <a href="/discover.html" class="btn-primary">Back to Discover</a>
+                    </div>
+                `;
+            }
+        }
+        
+        // Load blog when page loads
+        loadBlog();
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('.theme-icon');
+        
+        // Check for saved theme or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        });
+    </script>
+</body>
+</html>

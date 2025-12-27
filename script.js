@@ -791,30 +791,9 @@ class QuickBlog {
     }
 
     openArticle(author, blogId) {
-        // Try to get the blog title for SEO-friendly URL
-        const blogs = this.currentUser === author ? this.getUserBlogs() : [];
-        blogs.then(userBlogs => {
-            const blog = userBlogs.find(b => b.id === blogId);
-            if (blog) {
-                const slug = blog.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                const articleUrl = window.location.hostname === 'localhost'
-                    ? `http://localhost:3001/article/${slug}`
-                    : `${window.location.origin}/article/${slug}`;
-                window.open(articleUrl, '_blank');
-            } else {
-                // Fallback to old URL format
-                const articleUrl = window.location.hostname === 'localhost'
-                    ? `http://localhost:3001/blog/${author}/${blogId}`
-                    : `${window.location.origin}/blog/${author}/${blogId}`;
-                window.open(articleUrl, '_blank');
-            }
-        }).catch(() => {
-            // Fallback to old URL format
-            const articleUrl = window.location.hostname === 'localhost'
-                ? `http://localhost:3001/blog/${author}/${blogId}`
-                : `${window.location.origin}/blog/${author}/${blogId}`;
-            window.open(articleUrl, '_blank');
-        });
+        // Use live site URL for blog links
+        const blogViewUrl = `https://quick-blog-dymdcu1rk-divya4879s-projects.vercel.app/blog-view.html?id=${blogId}`;
+        window.open(blogViewUrl, '_blank');
     }
 
     async getUserBlogs() {
