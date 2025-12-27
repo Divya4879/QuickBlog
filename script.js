@@ -46,6 +46,37 @@ class QuickBlog {
             });
         }
 
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+                const icon = mobileMenuBtn.querySelector('span');
+                icon.textContent = mobileMenu.classList.contains('active') ? '✕' : '☰';
+            });
+            
+            // Close mobile menu when clicking on links
+            const mobileLinks = mobileMenu.querySelectorAll('.nav-link');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                    const icon = mobileMenuBtn.querySelector('span');
+                    icon.textContent = '☰';
+                });
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.classList.remove('active');
+                    const icon = mobileMenuBtn.querySelector('span');
+                    icon.textContent = '☰';
+                }
+            });
+        }
+
         // Navigation - all links work as normal page navigation now
         // No event listeners needed since they're proper href links
 
