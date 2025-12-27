@@ -265,14 +265,12 @@
                     throw new Error('Blog ID not provided');
                 }
                 
-                // Try local API first, then live API
-                let apiUrl = 'http://localhost:3001/api/blogs';
-                let response = await fetch(apiUrl).catch(() => null);
+                // Use the same origin API endpoint to avoid CORS issues
+                const apiUrl = `${window.location.origin}/api/blogs`;
+                const response = await fetch(apiUrl);
                 
-                if (!response || !response.ok) {
-                    // Fallback to live API
-                    apiUrl = 'https://quick-blog-dymdcu1rk-divya4879s-projects.vercel.app/api/blogs';
-                    response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch blogs');
                 }
                 
                 const data = await response.json();
